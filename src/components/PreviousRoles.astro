@@ -1,0 +1,81 @@
+---
+import PreviousRole from './PreviousRole.astro';
+
+interface Props {
+  roles: {
+    company: string;
+    title: string;
+    period: string;
+    description: string;
+  }[];
+}
+
+const { roles } = Astro.props;
+---
+
+<section id="previous-roles">
+  <h2>Previous roles</h2>
+  <hr>
+
+  {roles.slice(0, 5).map((role) => (
+    <PreviousRole role={role} />
+  ))}
+
+  <div id="additional-roles">
+    {roles.slice(5, roles.length).map((role) => (
+      <PreviousRole role={role} />
+    ))}
+  </div>
+
+  <a href="#additional-roles" id="show-all-roles" class="toggle-roles-button">Show all</a>
+  <a href="#previous-roles" id="show-less-roles" class="toggle-roles-button">Show less</a>
+</section>
+
+<style lang="scss">
+  section {
+    padding-bottom: 0;
+    background-color: var(--blue-green);
+  }
+
+  #additional-roles {
+    display: none;
+  }
+
+  #additional-roles:target {
+    display: block;
+
+    & ~ #show-all-roles {
+      display: none;
+    }
+
+    & ~ #show-less-roles {
+      display: block;
+    }
+  }
+
+  #show-all-roles {
+    display: block;
+  }
+
+  #show-less-roles {
+    display: none;
+  }
+
+  .toggle-roles-button {
+    width: 100%;
+    text-align: center;
+    padding: 1.6em;
+    cursor: pointer;
+    border: none;
+    font-size: 1.2em;
+    background-color: transparent;
+    color: var(--copper);
+    font-weight: 200;
+  }
+
+  @media (min-width: 768px) {
+    section {
+      background-color: var(--dark-blue);
+    }
+  }
+</style>

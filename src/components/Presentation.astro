@@ -1,0 +1,19 @@
+---
+interface Props {
+  content: string;
+}
+
+const { content } = Astro.props;
+---
+
+<section set:html={content}></section>
+
+<style lang="scss">
+  @media (min-width: 768px) {
+    section {
+      width: 60%;
+      padding-bottom: 3em;
+      padding-right: 3em; /* TODO: better than this. Should not be unique for this one */
+    }
+  }
+</style>

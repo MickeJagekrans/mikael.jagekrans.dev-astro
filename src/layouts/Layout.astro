@@ -1,50 +1,136 @@
 ---
+import Meta from '../components/Meta.astro';
+
 interface Props {
 	title: string;
 }
 
 const { title } = Astro.props;
+
+// TODO: From CMS on page build
+const meta = {
+  title: 'Mikael Jagekrans | Polyglot Developer | DevOps Engineer',
+  description: 'Mikael Jagekrans is a polyglot developer and DevOps engineer. This is his CV website.',
+  keywords: 'Mikael Jagekrans, Developer, DevOps, Engineer, Consultant, Freelancer, Back-end, Front-end, Full-stack, CV, Resume',
+  author: 'Mikael Jagekrans',
+  url: 'https://mikael.jagekrans.dev',
+  // image: '/images/profile-original.jpeg',
+};
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
-		<meta charset="UTF-8" />
-		<meta name="description" content="Astro description" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
+    <Meta meta={meta} />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Lexend+Deca:wght@200;300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/3.0.0/modern-normalize.min.css" />
+    <link rel="preload" as="fetch" href="/api/wake">
 		<title>{title}</title>
 	</head>
 	<body>
 		<slot />
 	</body>
 </html>
-<style is:global>
-	:root {
-		--accent: 136, 58, 234;
-		--accent-light: 224, 204, 250;
-		--accent-dark: 49, 10, 101;
-		--accent-gradient: linear-gradient(
-			45deg,
-			rgb(var(--accent)),
-			rgb(var(--accent-light)) 30%,
-			white 60%
-		);
-	}
-	html {
-		font-family: system-ui, sans-serif;
-		background: #13151a;
-	}
-	code {
-		font-family:
-			Menlo,
-			Monaco,
-			Lucida Console,
-			Liberation Mono,
-			DejaVu Sans Mono,
-			Bitstream Vera Sans Mono,
-			Courier New,
-			monospace;
-	}
+
+<style lang="scss" is:global>
+  :root {
+    --dark-blue: #202c39;
+    --blue-green: #283845;
+    --pale-bronze: #b8b08d;
+    --gold: #F2D492;
+    --copper: #F29559;
+    --dark-copper: #c4740b;
+    --whiteish: #EEF0EB;
+    --font-tahoma: Tahoma, Verdana, Segoe, sans-serif;
+    --font-didot: "Didot", "Didot LT STD", "Hoefler Text", Garamond, "Calisto MT", "Times New Roman", serif;
+  }
+
+  .instrument-serif {
+    font-weight: 400;
+    font-family: "Instrument Serif", Baskerville, serif;
+
+    &.regular {
+      font-style: normal;
+    }
+  }
+
+  .lexend-deca {
+    font-family: "Lexend Deca", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+
+    &.thin {
+      font-weight: 100;
+    }
+
+    &.extralight {
+      font-weight: 200;
+    }
+  }
+
+  a {
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    padding: 1em;
+    font-size: 1.5em;
+    color: var(--copper);
+  }
+
+  hr {
+    height: 2px;
+    border: none;
+    margin: 0;
+    padding: 0;
+    background-color: var(--copper);
+  }
+
+  html {
+    background-color: var(--dark-blue);
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-family: var(--font-tahoma);
+    font-weight: 200;
+  }
+
+  section {
+    padding: 0.5em 5vw;
+    font-size: 1.1em;
+    line-height: 1.5em;
+    color: var(--whiteish);
+    
+    h2 {
+      font-size: 2em;
+      color: var(--copper);
+      font-family: "Instrument Serif", Baskerville, serif; /* TODO: get this from Layout as variable? */
+      font-weight: 400;
+      font-style: normal;
+    }
+
+    h3 {
+      font-weight: 300;
+      color: var(--copper);
+    }
+  }
+
+  @media (min-width: 768px) {
+    section {
+      padding: 2em 2em;
+      width: 80%;
+      margin: 0 auto;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    section {
+      width: 65%;
+      max-width: 1000px;
+    }
+  }
 </style>

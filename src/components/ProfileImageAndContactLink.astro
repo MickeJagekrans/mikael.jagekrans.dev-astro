@@ -1,0 +1,74 @@
+---
+import { Image } from 'astro:assets';
+import profileImage from '../images/profile-original.jpeg';
+---
+
+<div id="profile-image-contact">
+  <div id="profile-image">
+    <Image
+      src={profileImage}
+      widths={[240, 320]}
+      sizes={"(max-width: 767px) 320px, 240px"}
+      width="320"
+      height="320"
+      loading="eager"
+      alt="Mikael Jagekrans" />
+  </div>
+
+  <a href="#contact">Contact me</a>
+</div>
+
+<style>
+  img {
+    width: 40%;
+    height: auto;
+    border-radius: 50%;
+    aspect-ratio: 1/1;
+  }
+
+  #profile-image-contact {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #profile-image {
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+  }
+
+  a {
+    margin-top: 0;
+    width: 60vw;
+    font-size: min(2em, 8vw);
+  }
+
+  @media (min-width: 768px) {
+    img {
+      width: 240px;
+      height: auto;
+    }
+
+    #profile-image-contact {
+      flex-direction: column;
+      width: 40%;
+      align-self: center;
+      padding: 2em 2em 3em 3em;
+    }
+
+    #profile-image {
+      width: 100%;
+    }
+
+    a {
+      width: 100%;
+      font-size: 2em;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    a {
+      padding: 0.5em;
+    }
+  }
+</style>

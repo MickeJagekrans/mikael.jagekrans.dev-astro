@@ -1,0 +1,66 @@
+---
+interface Props {
+  data: {
+    title: string;
+    subtitleRows: string[];
+  };
+}
+
+const { data: { title, subtitleRows } } = Astro.props;
+---
+
+<header>
+  <div id="header-title">
+    <span id="header-title-name" class="instrument-serif regular">{title}</span>
+    <hr>
+    {subtitleRows.map((subtitle) => (
+      <span class="header-title-subtitle">{subtitle}</span>
+    ))}
+  </div>
+</header>
+
+<style>
+  header {
+    min-height: 15vh;
+    width: 100%;
+    padding: 3em 0 1em;
+    color: var(--copper);
+  }
+
+  #header-title {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  hr {
+    height: 2px;
+    width: 88%;
+    margin: 0.7em auto 0.5em;
+  }
+
+  #header-title-name {
+    font-size: 14vw;
+  }
+
+  .header-title-subtitle {
+    font-size: 3.6vw;
+    margin-top: 0.5em;
+    letter-spacing: 0.15em;
+    color: var(--pale-bronze);
+  }
+
+  @media (min-width: 768px) {
+    hr {
+      width: 50%;
+    }
+
+    #header-title-name {
+      font-size: 4em;
+    }
+
+    .header-title-subtitle {
+      font-size: 1em;
+    }
+  }
+</style>

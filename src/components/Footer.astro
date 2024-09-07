@@ -1,0 +1,52 @@
+---
+import linkedinIcon from '../images/linkedin.png';
+import githubIcon from '../images/github.svg';
+import { Image } from 'astro:assets';
+
+interface Props {
+  year: number;
+}
+
+const { year } = Astro.props;
+---
+
+<footer>
+  <div id="social-media">
+    <a href="https://www.linkedin.com/in/mikael-jagekrans-8b2a1440/" target="_blank" rel="noopener noreferrer">
+      <img src={linkedinIcon.src} alt="LinkedIn logo" width="36" />
+    </a>
+
+    <a href="https://github.com/MickeJagekrans" target="_blank" rel="noopener noreferrer">
+      <Image src={githubIcon} alt="GitHub logo" width="36" />
+    </a>
+  </div>
+
+  <div id="copyright">
+    <p>&copy; {year} Mikael Jagekrans</p>
+  </div>
+</footer>
+
+<style>
+  footer {
+    min-height: 14vh;
+    width: 100%;
+    font-size: 1em;
+    background-color: black;
+    padding: 2em 0;
+  }
+
+  #social-media {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+
+  #copyright {
+    color: var(--whiteish);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: auto;
+  }
+</style>
