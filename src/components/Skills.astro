@@ -6,23 +6,25 @@ interface Props {
   }[];
 }
 
-const { skills} = Astro.props;
+const { skills } = Astro.props;
 ---
 
 <section>
-  <h2>Skills</h2>
+  <div id="skills">
+    <h2>Skills</h2>
 
-  <div id="skills-lists">
-    {skills.map((skillList) => (
-      <div class="skills-list">
-        <h3>{skillList.title}</h3>
-        <ul>
-          {skillList.items.map((skill) => (
-            <li>{skill}</li>
-          ))}
-        </ul>
-      </div>
-    ))}
+    <div id="skills-lists">
+      {skills.map((skillList) => (
+        <div class="skills-list">
+          <h3>{skillList.title}</h3>
+          <ul>
+            {skillList.items.map((skill) => (
+              <li>{skill}</li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
   </div>
 </section>
 
@@ -51,10 +53,13 @@ const { skills} = Astro.props;
   @media (min-width: 768px) {
     section {
       width: 100%;
+      padding: 0;
       max-width: unset;
-      padding-left: 3em;
-      padding-right: 3em;
       background-color: var(--blue-green);
+    }
+
+    #skills {
+      padding: 2em 4em;
     }
 
     #skills-lists {
@@ -64,6 +69,13 @@ const { skills} = Astro.props;
 
     .skills-list {
         width: 50%;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .skills-list {
+      width: 32.5%;
+      max-width: 1000px;
     }
   }
 </style>

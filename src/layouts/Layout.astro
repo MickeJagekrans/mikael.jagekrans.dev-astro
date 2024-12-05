@@ -1,31 +1,22 @@
 ---
 import Meta from '../components/Meta.astro';
+import metadata from '../data/metadata';
 
 interface Props {
 	title: string;
 }
 
 const { title } = Astro.props;
-
-// TODO: From CMS on page build
-const meta = {
-  title: 'Mikael Jagekrans | Polyglot Developer | DevOps Engineer',
-  description: 'Mikael Jagekrans is a polyglot developer and DevOps engineer. This is his CV website.',
-  keywords: 'Mikael Jagekrans, Developer, DevOps, Engineer, Consultant, Freelancer, Back-end, Front-end, Full-stack, CV, Resume',
-  author: 'Mikael Jagekrans',
-  url: 'https://mikael.jagekrans.dev',
-  // image: '/images/profile-original.jpeg',
-};
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
-    <Meta meta={meta} />
+    <Meta meta={metadata} />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Lexend+Deca:wght@200;300&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/3.0.0/modern-normalize.min.css" />
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Lexend+Deca:wght@200&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/3.0.0/modern-normalize.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
     <link rel="preload" as="fetch" href="/api/wake">
 		<title>{title}</title>
 	</head>
@@ -60,14 +51,7 @@ const meta = {
     font-family: "Lexend Deca", sans-serif;
     font-optical-sizing: auto;
     font-style: normal;
-
-    &.thin {
-      font-weight: 100;
-    }
-
-    &.extralight {
-      font-weight: 200;
-    }
+    font-weight: 200;
   }
 
   a {
