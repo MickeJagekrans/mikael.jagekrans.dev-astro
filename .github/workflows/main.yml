@@ -14,23 +14,31 @@ env:
   RECORD_SET_NAME: mikael
 
 jobs:
-  # build:
-  #   runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v2
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-  #     - name: Publish site
-  #       uses: actions/upload-artifact@v2
-  #       with:
-  #         name: site
-  #         path: site
+      - name: Use Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Build site
+        run: npm run build
+
+      - name: Publish site
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          path: dist
 
   setup-infra-and-deploy:
     runs-on: ubuntu-latest
     environment: production
-    # needs: build
+    needs: build
     steps:
       - name: Use Node.js 18
         uses: actions/setup-node@v4
