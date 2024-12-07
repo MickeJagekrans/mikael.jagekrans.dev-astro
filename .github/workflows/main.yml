@@ -1,0 +1,99 @@
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  SITE_NAME: jagekrans-dev-web
+  DNS_RESOURCE_GROUP: jagekrans-dev-rg
+  ZONE_NAME: jagekrans.dev
+  RECORD_SET_NAME: mikael
+
+jobs:
+  # build:
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v2
+
+  #     - name: Publish site
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: site
+  #         path: site
+
+  setup-infra-and-deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    # needs: build
+    steps:
+      - name: Use Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Create resource group
+        run: >
+          az group create
+          --name ${{ vars.AZURE_RESOURCE_GROUP }}
+          --location ${{ vars.AZURE_LOCATION }}
+
+      - name: Deploy infrastructure
+        run: >
+          az deployment group create
+          --name "jagekrans-dev-web-deployment"
+          --resource-group ${{ vars.AZURE_RESOURCE_GROUP }}
+          --template-file .infra/main.bicep
+          --mode Incremental
+          --parameters '{
+            "siteName": { "value": "${{ env.SITE_NAME }}" },
+            "sendGridApiKey": { "value": "${{ secrets.SENDGRID_API_KEY }}" },
+            "msgReceiver": { "value": "${{ secrets.MSG_RECEIVER }}" }
+          }'
+
+      - name: Get API token
+        run: |
+          token=$(az staticwebapp secrets list --name ${{ env.SITE_NAME }} --query "properties.apiKey" -o tsv)
+          echo "::add-mask::$token"
+          echo "SWA_TOKEN=$token" >> $GITHUB_ENV
+
+      - name: Deploy static web app
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ env.SWA_TOKEN }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          action: 'upload'
+          app_location: 'dist'
+          api_location: 'api'
+          config_file_location: './'
+
+      - name: Get app URL
+        run: |
+          appId=$(az staticwebapp show --name ${{ env.SITE_NAME }} --query id -o tsv)
+          echo "APP_ID=$appId" >> $GITHUB_ENV
+
+      - name: Create DNS record and configure custom hostname
+        run: >
+          bash ./build-scripts/set-app-custom-hostname.sh
+          --site-name ${{ env.SITE_NAME }}
+          --dns-resource-group ${{ env.DNS_RESOURCE_GROUP }}
+          --zone-name ${{ env.ZONE_NAME }}
+          --record-set-name ${{ env.RECORD_SET_NAME }}
+          --app-id ${{ env.APP_ID }}
+          --dns-subscription-id ${{ secrets.DNS_SUBSCRIPTION_ID }}
+          --azure-subscription-id ${{ secrets.AZURE_SUBSCRIPTION_ID }}
