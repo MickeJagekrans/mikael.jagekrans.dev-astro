@@ -30,7 +30,7 @@ jobs:
         run: npm run build
 
       - name: Publish site
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: dist
           path: dist
@@ -48,6 +48,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+
       - name: Login via Azure CLI
         uses: azure/login@v1
         with:
@@ -55,24 +61,24 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Create resource group
-        run: >
-          az group create
-          --name ${{ vars.AZURE_RESOURCE_GROUP }}
-          --location ${{ vars.AZURE_LOCATION }}
+      # - name: Create resource group
+      #   run: >
+      #     az group create
+      #     --name ${{ vars.AZURE_RESOURCE_GROUP }}
+      #     --location ${{ vars.AZURE_LOCATION }}
 
-      - name: Deploy infrastructure
-        run: >
-          az deployment group create
-          --name "jagekrans-dev-web-deployment"
-          --resource-group ${{ vars.AZURE_RESOURCE_GROUP }}
-          --template-file .infra/main.bicep
-          --mode Incremental
-          --parameters '{
-            "siteName": { "value": "${{ env.SITE_NAME }}" },
-            "sendGridApiKey": { "value": "${{ secrets.SENDGRID_API_KEY }}" },
-            "msgReceiver": { "value": "${{ secrets.MSG_RECEIVER }}" }
-          }'
+      # - name: Deploy infrastructure
+      #   run: >
+      #     az deployment group create
+      #     --name "jagekrans-dev-web-deployment"
+      #     --resource-group ${{ vars.AZURE_RESOURCE_GROUP }}
+      #     --template-file .infra/main.bicep
+      #     --mode Incremental
+      #     --parameters '{
+      #       "siteName": { "value": "${{ env.SITE_NAME }}" },
+      #       "sendGridApiKey": { "value": "${{ secrets.SENDGRID_API_KEY }}" },
+      #       "msgReceiver": { "value": "${{ secrets.MSG_RECEIVER }}" }
+      #     }'
 
       - name: Get API token
         run: |
@@ -90,18 +96,18 @@ jobs:
           api_location: 'api'
           config_file_location: './'
 
-      - name: Get app URL
-        run: |
-          appId=$(az staticwebapp show --name ${{ env.SITE_NAME }} --query id -o tsv)
-          echo "APP_ID=$appId" >> $GITHUB_ENV
+      # - name: Get app URL
+      #   run: |
+      #     appId=$(az staticwebapp show --name ${{ env.SITE_NAME }} --query id -o tsv)
+      #     echo "APP_ID=$appId" >> $GITHUB_ENV
 
-      - name: Create DNS record and configure custom hostname
-        run: >
-          bash ./build-scripts/set-app-custom-hostname.sh
-          --site-name ${{ env.SITE_NAME }}
-          --dns-resource-group ${{ env.DNS_RESOURCE_GROUP }}
-          --zone-name ${{ env.ZONE_NAME }}
-          --record-set-name ${{ env.RECORD_SET_NAME }}
-          --app-id ${{ env.APP_ID }}
-          --dns-subscription-id ${{ secrets.DNS_SUBSCRIPTION_ID }}
-          --azure-subscription-id ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      # - name: Create DNS record and configure custom hostname
+      #   run: >
+      #     bash ./build-scripts/set-app-custom-hostname.sh
+      #     --site-name ${{ env.SITE_NAME }}
+      #     --dns-resource-group ${{ env.DNS_RESOURCE_GROUP }}
+      #     --zone-name ${{ env.ZONE_NAME }}
+      #     --record-set-name ${{ env.RECORD_SET_NAME }}
+      #     --app-id ${{ env.APP_ID }}
+      #     --dns-subscription-id ${{ secrets.DNS_SUBSCRIPTION_ID }}
+      #     --azure-subscription-id ${{ secrets.AZURE_SUBSCRIPTION_ID }}
