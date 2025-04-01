@@ -93,6 +93,12 @@ const skills = [
 
 const previousRoles = [
   {
+    company: "Svea Bank",
+    title: "Senior F# Developer | Consultant",
+    period: "Apr 24 - Apr 25",
+    description: "<p>Mainly worked on development and maintenance of core banking systems such as integrations with Swish and other banks. Also spent some time refactoring older systems to be more up to date and easier to work with and deploy, and implemented centralized CI/CD pipeline template management.</p><p>Implemented new REST endpoints and accompanying pages in their internal portal using Fable+Elmish.</p><p>Set up and configured CI/CD, repos, automated testing, vulnerability scanning, and more for a greenfield project.</p><p>All systems were written in F# using functional programming techniques.</p>"
+  },
+  {
     company: "Handelsbanken",
     title: "DevOps Engineer | Consultant",
     period: "May 23 - Oct 23",
